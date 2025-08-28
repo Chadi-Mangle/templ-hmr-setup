@@ -15,6 +15,10 @@ func main() {
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
+	// Serve assets files
+	assetsFs := http.FileServer(http.Dir("./assets"))
+	http.Handle("/assets/", http.StripPrefix("/assets/", assetsFs))
+
 	fmt.Println("Listening on :3000 🚀")
 	http.ListenAndServe(":3000", nil)
 }
