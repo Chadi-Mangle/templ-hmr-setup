@@ -1,4 +1,4 @@
-module air-setup
+module github.com/Chadi-Mangle/templ-hmr-setup
 
 go 1.24.6
 

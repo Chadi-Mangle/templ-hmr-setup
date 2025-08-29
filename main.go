@@ -4,21 +4,22 @@ import (
 	"fmt"
 	"net/http"
 
+	"embed"
+
 	"github.com/a-h/templ"
+
+	"github.com/Chadi-Mangle/templ-hmr-setup/templates"
 )
 
+//go:embed assets
+var assetsFS embed.FS
+
 func main() {
-	component := hello("Templ!")
+	component := templates.Hello("Chadi")
 	http.Handle("/", templ.Handler(component))
 
-	// Serve static files
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.FS(assetsFS))))
 
-	// Serve assets files
-	assetsFs := http.FileServer(http.Dir("./assets"))
-	http.Handle("/assets/", http.StripPrefix("/assets/", assetsFs))
-
-	fmt.Println("Listening on :3000 🚀")
+	fmt.Println("Listening on :3000")
 	http.ListenAndServe(":3000", nil)
 }

@@ -1,2 +1,19 @@
-dev: 
-	parallel -j 2 --line-buffer ::: 'npx tailwindcss -i assets/src/style.css -o assets/dist/style.css --watch=always' 'templ generate -watch -proxy="http://localhost:3000" -proxyport="8080" -cmd="go run ."'
+CSS_INPUT = assets/src/style.css
+CSS_OUTPUT = assets/dist/style.css
+PROXY_PORT = 8080
+APP_PORT = 3000
+
+css-watch:
+	npx tailwindcss -i $(CSS_INPUT) -o $(CSS_OUTPUT) --watch=always
+
+templ-watch:
+	templ generate -watch \
+		-proxy="http://localhost:$(APP_PORT)" \
+		-proxyport="$(PROXY_PORT)" \
+		--open-browser=false \
+		-cmd="go run ."
+
+dev:
+	parallel -j 2 --line-buffer ::: \
+		'make css-watch' \
+		'make templ-watch'
