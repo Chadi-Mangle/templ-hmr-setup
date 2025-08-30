@@ -17,3 +17,8 @@ dev:
 	parallel -j 2 --line-buffer ::: \
 		'make css-watch' \
 		'make templ-watch'
+
+build:
+	templ generate 
+	npx tailwindcss -i $(CSS_INPUT) -o $(CSS_OUTPUT)
+	go build -tags embed -o ./tmp/build
